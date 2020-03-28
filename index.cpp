@@ -1,4 +1,4 @@
- #include <iostream>
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <cstdlib>
@@ -12,15 +12,17 @@ int m1[101][101];
 string m2[402][402], m3[402][402];
 string row[402], column[101];//los 1 son caminos posibles y los 0 barrera   
 int checks[101][101];// en 0 signfica que no se ha visitado
-int hilos,indexFila=-1, indexColumna=-1;
+int hilos,indexFila=-1, indexColumna=-1, ybuscado=-1,xbuscado=-1;
 int contador=0;
 bool fin =false;
+//bool solver(int &, int &);
 
 void solver(int y,int x){//255 es camino libre
-  bool flag = false;
   checks[y][x]=1;
+  bool flag = false;
   if(y==100 && x>97 ){
-    fin =true;
+    ybuscado=y;
+    xbuscado=x;
   }else{
     if(x+1<=100 && !fin){//verificar que no se salga de los limites de la matriz
       if(checks[y][x+1]==0 && m3[y][x+1].compare("255")==0){//verificar que no se haya visitado la casilla. Mover una casilla a la derecha eje x
@@ -28,8 +30,18 @@ void solver(int y,int x){//255 es camino libre
         contador++;
         thread t1(solver,y,x+1);
         t1.join();
+        if(y==ybuscado && x+1==xbuscado){
+          cout << y << " " << x << "\n";
+          ybuscado=y;
+          xbuscado=x;
+        }
       }else{
         solver(y,x+1);
+        if(y==ybuscado && x+1==xbuscado){
+          cout << y << " " << x << "\n";
+          ybuscado=y;
+          xbuscado=x;
+        }
       } 
          flag=true;
       }
@@ -39,9 +51,20 @@ void solver(int y,int x){//255 es camino libre
      if(contador<hilos){
        contador++;
          thread t1(solver,y,x-1);
+        
          t1.join();
+          if(y==ybuscado && x-1==xbuscado){
+            cout << y << " " << x << "\n";
+            ybuscado=y;
+            xbuscado=x;
+          }
       }else{
         solver(y,x-1);
+        if(y==ybuscado && x-1==xbuscado){
+            cout << y << " " << x << "\n";
+            ybuscado=y;
+            xbuscado=x;
+          }
       }
        flag=true;
       }
@@ -52,8 +75,18 @@ void solver(int y,int x){//255 es camino libre
        contador++;
         thread t1(solver,y+1,x);
         t1.join();
+         if(y+1==ybuscado && x==xbuscado){
+            cout << y << " " << x << "\n";
+            ybuscado=y;
+            xbuscado=x;
+        }
       }else{
         solver(y+1,x);
+        if(y+1==ybuscado && x==xbuscado){
+            cout << y << " " << x << "\n";
+            ybuscado=y;
+            xbuscado=x;
+        }
       }
        flag=true;
      }
@@ -64,9 +97,20 @@ void solver(int y,int x){//255 es camino libre
       if(contador<hilos){
         contador++;
         thread t1(solver,y-1,x);
+        
         t1.join();
+        if(y-1==ybuscado && x==xbuscado){
+            cout << y << " " << x << "\n";
+            ybuscado=y;
+            xbuscado=x;
+        }
       }else{
          solver(y-1,x);
+         if(y-1==ybuscado && x==xbuscado){
+            cout << y << " " << x << "\n";
+            ybuscado=y;
+            xbuscado=x;
+          }
       }
        flag=true;
       }
@@ -75,9 +119,8 @@ void solver(int y,int x){//255 es camino libre
       contador--;
     }
 }
+
 }
-
-
 
 bool comparador(){
   if(indexFila==-1){
@@ -184,14 +227,28 @@ int main()
   }
   i=0;
   myoutfile.close();*/
-  int i;
+  int i,j;
   cout << "Inserta el número de hilos: ";
   cin >> hilos;
   i=0;
   cout <<"----------------------------------------------------------------------------------------------" <<"\n";
   t0=clock();
-  solver(0,0);
+  solver(0,1);
   t1=clock();
+  /*i=0,j=0;
+  while(i<101){
+    j=0;
+    while(j<101){
+      if(checks[i][j]==1){
+        cout << "o";
+      }else{
+        cout << "x";
+      }
+      j++;
+    }
+    cout << "\n";
+    i++;
+  }*/
   double time = (double(t1-t0)/CLOCKS_PER_SEC);
 cout << "Execution Time: " << time << endl;
   cout <<"----------------------------------------------------------------------------------------------" <<"\n";
