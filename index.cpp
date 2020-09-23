@@ -15,7 +15,7 @@ int checks[101][101];// en 0 signfica que no se ha visitado
 int hilos,indexFila=-1, indexColumna=-1, ybuscado=-1,xbuscado=-1;
 int contador=0;
 bool fin =false;
-//bool solver(int &, int &);
+
 
 void solver(int y,int x){//255 es camino libre
   checks[y][x]=1;
@@ -209,24 +209,6 @@ void recorteVertical(){
 int main() 
 {
   recorteVertical();
-  /*int i=0;
-  int j;
-  string hc ="0";
-  ofstream myoutfile("resultado.txt");
-  while(i<101){
-    j=0;
-    while(j<101){
-      if(j==0){
-         myoutfile << hc << "\n";
-      }else{
-        myoutfile << m3[i][j-1] << "\n";
-      }
-      j++;
-    }
-    i++;
-  }
-  i=0;
-  myoutfile.close();*/
   int i,j;
   cout << "Inserta el número de hilos: ";
   cin >> hilos;
@@ -235,20 +217,7 @@ int main()
   t0=clock();
   solver(0,1);
   t1=clock();
-  /*i=0,j=0;
-  while(i<101){
-    j=0;
-    while(j<101){
-      if(checks[i][j]==1){
-        cout << "o";
-      }else{
-        cout << "x";
-      }
-      j++;
-    }
-    cout << "\n";
-    i++;
-  }*/
+
   double time = (double(t1-t0)/CLOCKS_PER_SEC);
 cout << "Execution Time: " << time << endl;
   cout <<"----------------------------------------------------------------------------------------------" <<"\n";
